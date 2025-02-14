@@ -4,17 +4,34 @@ type TDataNode = {
   id: ID
   // ... props ...
   name: string
+  data?: TCheckBox | TAnchorItem | TPlainItem
+  category?: TCategory
   children?: TDataNode[]
 }
 
 type TTreeNode = TDataNode & {
-  type: TItemType
-  data?: TCheckBox
-  isExpanded?: boolean
+  _isCategory?: boolean
 }
 
-type TItemType = 'checkbox' | 'item' | 'category'
+type TItemType = 'checkbox' | 'plain' | 'ahchor'
 
-type TCheckBox = {
+type TCategory = {
+  isExpanded?: boolean
+  // ... some data for category
+}
+
+type TCheckBoxItem = {
+  type: TItemType['checkbox']
   selected: boolean
+  indeterminate: boolean
+}
+
+type TPlainItem = {
+  type: TItemType['plain']
+}
+
+type TAnchorItem = {
+  type: TItemType['ahchor']
+  href: string
+  target?: '_blank'
 }

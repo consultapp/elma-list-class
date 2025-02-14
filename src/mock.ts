@@ -12,6 +12,9 @@ export const mockData: TDataNode[] = [
             name: 'Элемент третьего уровня 1',
           },
         ],
+        category: {
+          isExpanded: false,
+        },
       },
       {
         id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9053',
@@ -19,9 +22,16 @@ export const mockData: TDataNode[] = [
         children: [
           {
             id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
-            name: 'Элемент третьего уровня 2',
+            name: 'Элемент третьего уровня 2_0',
+          },
+          {
+            id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
+            name: 'Элемент третьего уровня 2_1',
           },
         ],
+        category: {
+          isExpanded: false,
+        },
       },
     ],
   },
