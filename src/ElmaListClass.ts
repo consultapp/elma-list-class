@@ -1,9 +1,14 @@
+import { ElmaListNode, ElmaListNodeCategory } from './ElmaListNode'
+
 export class ElmaListClass {
   tree: TTreeNode[]
-  element = document.createElement('ul')
+  element = this.createDomElement()
   rootNodes: ElmaListNode[]
 
-  constructor(private data: TDataNode[]) {
+  constructor(
+    private data: TDataNode[],
+    private className: string = 'nodeRoot'
+  ) {
     this.data.forEach((d) => this.buildTreeNodeFromData(d))
     this.tree = this.data as TTreeNode[]
     this.rootNodes = this.tree.map((t) =>
@@ -11,6 +16,19 @@ export class ElmaListClass {
         ? new ElmaListNodeCategory(null, t)
         : new ElmaListNode(null, t)
     )
+  }
+
+  createDomElement() {
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = `
+    <ul class="${this.className}">
+      <style>
+        ul, li{
+          list-style: disc;
+        }
+      </style>
+    </li>`
+    return wrapper.children[0] as HTMLLIElement
   }
 
   render(root: Element | undefined | null) {
@@ -39,93 +57,6 @@ export class ElmaListClass {
   remove() {
     if (this.element) {
       this.element.remove()
-    }
-  }
-}
-
-class ElmaListNode {
-  public element: HTMLLIElement | undefined
-  constructor(protected root: ElmaListNode | null, protected node: TTreeNode) {
-    this.createDom()
-    if (!this.node._isCategory) this.render()
-  }
-
-  render() {
-    this.appendToRoot()
-  }
-
-  append(element: Element) {
-    if (this.element) this.element.children[0].append(element)
-  }
-
-  appendToRoot() {
-    if (this.root && this.element) this.root.append(this.element)
-  }
-
-  createDom() {
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = `
-    <li class="nodeRoot">
-          <div class="itemRoot" data-childrenWrapper="true">${this.node.name}</div>
-      </li>
-    `
-    this.element = wrapper.children[0] as HTMLLIElement
-  }
-
-  remove() {
-    if (this.element) {
-      this.element.remove()
-    }
-  }
-}
-
-class ElmaListNodeCategory extends ElmaListNode {
-  public children: ElmaListNode[] = []
-  protected childrenWrapper: Element | undefined | null
-
-  constructor(protected root: ElmaListNode | null, protected node: TTreeNode) {
-    super(root, node)
-    this.createChildrenNodes()
-    this.render()
-  }
-
-  createChildrenNodes() {
-    this.children = (this.node.children as TTreeNode[]).map((t) =>
-      t._isCategory
-        ? new ElmaListNodeCategory(this, t)
-        : new ElmaListNode(this, t)
-    )
-  }
-
-  append(element: Element) {
-    if (this.element) {
-      if (!this.childrenWrapper)
-        this.childrenWrapper = this.element.querySelector(
-          '[data-childrenWrapper="true"]'
-        )
-      this.childrenWrapper?.append(element)
-    }
-  }
-
-  createDom() {
-    if (this.element) this.element.remove()
-
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = `
-    <li class="nodeRoot">
-        <details>
-          <summary> <checkbox>+/-</checkbox> ${this.node.name}</summary>
-          <ul class="category" data-childrenWrapper="true"></ul>
-        </details>
-      </li>
-    `
-    this.element = wrapper.children[0] as HTMLLIElement
-  }
-
-  remove() {
-    if (this.element) {
-      this.element.remove()
-      this.children?.forEach((c) => c.remove())
     }
   }
 }
