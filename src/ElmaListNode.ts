@@ -1,6 +1,8 @@
+import { ElmaListItem } from './ElmaListtem'
+
 export class ElmaListNode {
   public element: HTMLLIElement | undefined
-  protected item: ListItem | undefined
+  protected item: ElmaListItem | undefined
   constructor(protected root: ElmaListNode | null, protected node: TTreeNode) {
     this.createDomElement()
     if (!this.node._isCategory) this.render()
@@ -27,7 +29,7 @@ export class ElmaListNode {
   }
 
   getItem() {
-    this.item = ListItem.getItem(this.node.item)
+    this.item = ElmaListItem.getItem(this.node.item)
   }
 
   remove() {
@@ -72,7 +74,7 @@ export class ElmaListNodeCategory extends ElmaListNode {
     const wrapper = document.createElement('div')
     wrapper.innerHTML = `
       <li class="nodeRoot">
-          <details open>
+          <details ${this.node.category?.isExpanded ? 'open' : ''}>
             <summary></summary>
             <ul class="category" data-childrenWrapper="true"></ul>
           </details>
@@ -87,51 +89,5 @@ export class ElmaListNodeCategory extends ElmaListNode {
       this.element.remove()
       this.children?.forEach((c) => c.remove())
     }
-  }
-}
-
-class ListItem {
-  public element: Element | undefined
-  constructor(protected data: TListItem) {
-    this.createDomElement()
-  }
-
-  createDomElement() {
-    if (this.element) this.element.remove()
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = `<span> ${this.data.name}<span>`
-    this.element = wrapper.children[0] as HTMLLIElement
-  }
-
-  static getItem(data: TListItem) {
-    switch (data.type) {
-      case 'plain':
-        return new ListItem(data)
-      case 'checkbox':
-        return new ListItemCheckbox(data)
-      case 'anchor':
-        return new ListItemAnchor(data)
-      default:
-        return new ListItem(data)
-    }
-  }
-}
-
-class ListItemCheckbox extends ListItem {
-  createDomElement() {
-    if (this.element) this.element.remove()
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = `<label><input type="checkbox"  /> ${this.data.name}</label>`
-    this.element = wrapper.children[0] as HTMLLIElement
-  }
-}
-
-class ListItemAnchor extends ListItem {
-  createDomElement() {
-    const data = this.data as TAnchorItem
-    if (this.element) this.element.remove()
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = `<a href="${data.href}"> ${data.name}</a>`
-    this.element = wrapper.children[0] as HTMLLIElement
   }
 }

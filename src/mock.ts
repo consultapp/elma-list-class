@@ -1,6 +1,8 @@
 export const mockData: TDataNode[] = [
   {
     id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9051',
+    category: { isExpanded: true },
+
     item: {
       name: 'BUSINESS MODEL',
       type: 'anchor',
@@ -22,9 +24,6 @@ export const mockData: TDataNode[] = [
             },
           },
         ],
-        category: {
-          isExpanded: false,
-        },
       },
       {
         id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9053',
@@ -49,7 +48,7 @@ export const mockData: TDataNode[] = [
           },
         ],
         category: {
-          isExpanded: false,
+          isExpanded: true,
         },
       },
     ],
