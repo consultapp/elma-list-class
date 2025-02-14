@@ -20,14 +20,7 @@ export class ElmaListClass {
 
   createDomElement() {
     const wrapper = document.createElement('div')
-    wrapper.innerHTML = `
-    <ul class="${this.className}">
-      <style>
-        ul, li{
-          list-style: disc;
-        }
-      </style>
-    </li>`
+    wrapper.innerHTML = this.template
     return wrapper.children[0] as HTMLLIElement
   }
 
@@ -54,9 +47,24 @@ export class ElmaListClass {
     this.element?.append(...this.rootNodes.map((r) => r.element ?? ''))
   }
 
+  get template() {
+    return `
+    <ul class="${this.className}">
+      <style>
+        ul, li{
+          list-style: disc;
+        }
+      </style>
+    </li>`
+  }
+
   remove() {
     if (this.element) {
       this.element.remove()
     }
+  }
+
+  destroy() {
+    this.remove()
   }
 }

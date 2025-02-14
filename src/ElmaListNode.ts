@@ -23,7 +23,7 @@ export class ElmaListNode {
   createDomElement() {
     this.getItem()
     const wrapper = document.createElement('div')
-    wrapper.innerHTML = `<li class="nodeRoot"></li>`
+    wrapper.innerHTML = this.template
     this.element = wrapper.children[0] as HTMLLIElement
     this.element.append(this.item?.element ?? '')
   }
@@ -32,10 +32,20 @@ export class ElmaListNode {
     this.item = ElmaListItem.getItem(this.node.item)
   }
 
+  get template() {
+    return `<li class="nodeRoot"></li>`
+  }
+
   remove() {
     if (this.element) {
       this.element.remove()
     }
+  }
+
+  destroy() {
+    this.remove()
+    this.element = undefined
+    this.item = undefined
   }
 }
 
@@ -72,7 +82,13 @@ export class ElmaListNodeCategory extends ElmaListNode {
     this.getItem()
 
     const wrapper = document.createElement('div')
-    wrapper.innerHTML = `
+    wrapper.innerHTML = this.template
+    this.element = wrapper.children[0] as HTMLLIElement
+    this.element.querySelector('summary')?.append(this.item?.element ?? '')
+  }
+
+  get template() {
+    return `
       <li class="nodeRoot">
           <details ${this.node.category?.isExpanded ? 'open' : ''}>
             <summary></summary>
@@ -80,8 +96,6 @@ export class ElmaListNodeCategory extends ElmaListNode {
           </details>
         </li>
       `
-    this.element = wrapper.children[0] as HTMLLIElement
-    this.element.querySelector('summary')?.append(this.item?.element ?? '')
   }
 
   remove() {
