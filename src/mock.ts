@@ -1,5 +1,12 @@
 export const mockData: TDataNode[] = [
   {
+    id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9052',
+    item: {
+      name: 'Lorem....',
+      type: 'plain',
+    },
+  },
+  {
     id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9051',
     category: { isExpanded: true },
 
