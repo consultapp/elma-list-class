@@ -8,7 +8,7 @@ type TDataNode = {
 }
 
 type TTreeNode = TDataNode & {
-  _isCategory?: boolean
+  _isCategory: boolean
 }
 
 type TCategory = {

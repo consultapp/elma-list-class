@@ -24,14 +24,17 @@ export class ElmaListClass {
     return wrapper.children[0] as HTMLLIElement
   }
 
-  render(root: Element | undefined | null) {
+  render(root: Element): void {
+    if (!(root instanceof Element)) {
+      throw new Error('Invalid root element')
+    }
+
     this.appendChildren()
-    if (!root) throw new Error('root is not exist.')
-    if (this.element) root.append(this.element)
+    root.append(this.element)
   }
 
   buildTreeNodeFromData(data: TDataNode): TTreeNode {
-    Object.assign(data, { _isCategory: this.getIsCategory(data) })
+    Object.assign(data, { _isCategory: this.isCategory(data) })
     data.children?.forEach((item) => {
       this.buildTreeNodeFromData(item)
     })
@@ -39,32 +42,44 @@ export class ElmaListClass {
     return data as TTreeNode
   }
 
-  getIsCategory(item: TDataNode) {
-    return 'children' in item
+  private isCategory(item: TDataNode): boolean {
+    return Array.isArray(item.children) && item.children.length > 0
   }
 
-  appendChildren() {
-    this.element?.append(...this.rootNodes.map((r) => r.element ?? ''))
+  private appendChildren(): void {
+    const validElements = this.rootNodes
+      .map((r) => r.element)
+      .filter((el): el is HTMLLIElement => el !== undefined)
+
+    if (validElements.length > 0) {
+      this.element.append(...validElements)
+    }
   }
 
   get template() {
     return `
     <ul class="${this.className}">
       <style>
-        ul, li{
-          list-style: disc;
+        .${this.className} ul, li{
+          list-style: none;
+        }
+        .${this.className} details > summary {
+          cursor: pointer;
         }
       </style>
     </li>`
   }
 
   remove() {
-    if (this.element) {
-      this.element.remove()
-    }
+    this.element?.remove()
+    this.element = null!
+    this.rootNodes.forEach((n) => n.remove())
   }
 
-  destroy() {
-    this.remove()
+  destroy(): void {
+    this.rootNodes.forEach((node) => node.destroy())
+    this.element.remove()
+    this.tree = []
+    this.rootNodes = []
   }
 }

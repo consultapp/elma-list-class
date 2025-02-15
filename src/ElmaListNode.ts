@@ -1,4 +1,4 @@
-import { ElmaListItem } from './ElmaListtem'
+import { ElmaListItem } from './ElmaListItem.ts'
 
 export class ElmaListNode {
   public element: HTMLLIElement | undefined
@@ -12,8 +12,8 @@ export class ElmaListNode {
     this.appendToRoot()
   }
 
-  append(element: Element) {
-    if (this.element) this.element.children[0].append(element)
+  append(_: Element) {
+    console.error('Метод append вызывается не на категории.')
   }
 
   appendToRoot() {
@@ -60,7 +60,8 @@ export class ElmaListNodeCategory extends ElmaListNode {
   }
 
   createChildrenNodes() {
-    this.children = (this.node.children as TTreeNode[]).map((t) =>
+    const children = this.node.children ?? []
+    this.children = (children as TTreeNode[]).map((t) =>
       t._isCategory
         ? new ElmaListNodeCategory(this, t)
         : new ElmaListNode(this, t)
@@ -78,7 +79,6 @@ export class ElmaListNodeCategory extends ElmaListNode {
   }
 
   createDomElement() {
-    if (this.element) this.element.remove()
     this.getItem()
 
     const wrapper = document.createElement('div')
@@ -103,5 +103,12 @@ export class ElmaListNodeCategory extends ElmaListNode {
       this.element.remove()
       this.children?.forEach((c) => c.remove())
     }
+  }
+
+  destroy() {
+    this.remove()
+    this.children.forEach((child) => child.destroy())
+    this.children = []
+    super.destroy()
   }
 }

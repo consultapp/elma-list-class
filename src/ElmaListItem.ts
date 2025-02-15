@@ -7,8 +7,12 @@ export class ElmaListItem {
   createDomElement() {
     if (this.element) this.element.remove()
     const wrapper = document.createElement('div')
-    wrapper.innerHTML = `<span> ${this.data.name}<span>`
+    wrapper.innerHTML = this.template
     this.element = wrapper.children[0] as HTMLLIElement
+  }
+
+  get template() {
+    return `<span> ${this.data.name}<span>`
   }
 
   static getItem(data: TListItem) {
@@ -29,8 +33,12 @@ class ElmaListItemCheckbox extends ElmaListItem {
   createDomElement() {
     if (this.element) this.element.remove()
     const wrapper = document.createElement('div')
-    wrapper.innerHTML = `<label><input type="checkbox"  /> ${this.data.name}</label>`
+    wrapper.innerHTML = this.template
     this.element = wrapper.children[0] as HTMLLIElement
+  }
+
+  get template() {
+    return `<label><input type="checkbox"  /> ${this.data.name}</label>`
   }
 }
 
