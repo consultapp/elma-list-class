@@ -1,7 +1,7 @@
 export class ElmaListItem<T extends TListItem> {
   public element: HTMLElement | undefined
 
-  constructor(protected data: T) {
+  constructor(protected data: T, protected onCheckboxChange?: () => void) {
     this.createDomElement()
   }
 
@@ -16,33 +16,53 @@ export class ElmaListItem<T extends TListItem> {
     return `<span>${this.data.name}</span>`
   }
 
-  static getItem(data: TListItem): ElmaListItem<TListItem> {
+  getItemData() {
+    return this.data
+  }
+
+  static getItem(
+    data: TListItem,
+    onCheckboxChange?: () => void
+  ): ElmaListItem<TListItem> {
     switch (data.type) {
       case 'plain':
-        return new ElmaListItem(data)
+        return new ElmaListItem(data, onCheckboxChange)
       case 'checkbox':
-        return new ElmaListItemCheckbox(data)
+        return new ElmaListItemCheckbox(data, onCheckboxChange)
       case 'anchor':
-        return new ElmaListItemAnchor(data)
+        return new ElmaListItemAnchor(data, onCheckboxChange)
       default:
-        return new ElmaListItem(data)
+        return new ElmaListItem(data, onCheckboxChange)
     }
   }
 }
 
-class ElmaListItemCheckbox extends ElmaListItem<CheckboxItem> {
-  private checkbox: HTMLInputElement | null = null
+export class ElmaListItemCheckbox extends ElmaListItem<CheckboxItem> {
+  constructor(data: CheckboxItem, protected onCheckboxChange?: () => void) {
+    super(data, onCheckboxChange)
+  }
 
   createDomElement() {
     super.createDomElement()
-    this.checkbox =
-      this.element?.querySelector('input[type="checkbox"]') || null
-    this.checkbox?.addEventListener('change', () => this.toggle())
+    this.checkbox?.addEventListener('change', () => {
+      this.toggle()
+    })
   }
 
   toggle() {
+    if (this.checkbox && 'checked' in this.checkbox) {
+      this.data.checked = Boolean(this.checkbox.checked)
+    }
+    this.onCheckboxChange?.()
+  }
+
+  setState(checkedCount: number, total: number) {
+    this.data.checked = checkedCount === total
+    this.data.indeterminate = checkedCount > 0 && checkedCount < total
+
     if (this.checkbox) {
-      this.data.checked = this.checkbox.checked
+      this.checkbox.checked = this.data.checked
+      this.checkbox.indeterminate = this.data.indeterminate
     }
   }
 
@@ -53,6 +73,10 @@ class ElmaListItemCheckbox extends ElmaListItem<CheckboxItem> {
         ${this.data.name}
       </label>
     `
+  }
+
+  get checkbox(): HTMLInputElement | null {
+    return (this.element?.children[0] as HTMLInputElement) ?? null
   }
 }
 

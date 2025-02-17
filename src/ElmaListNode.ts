@@ -1,8 +1,8 @@
-import { ElmaListItem } from './ElmaListItem.ts'
+import { ElmaListItem, ElmaListItemCheckbox } from './ElmaListItem.ts'
 
 export class ElmaListNode {
   public element: HTMLLIElement | undefined
-  protected item: ElmaListItem<TListItem> | undefined
+  public item: ElmaListItem<TListItem> | undefined
   constructor(protected root: ElmaListNode | null, protected node: TTreeNode) {
     this.createDomElement()
     if (!this.node._isCategory) this.render()
@@ -28,12 +28,29 @@ export class ElmaListNode {
     this.element.append(this.item?.element ?? '')
   }
 
+  onChildCheckboxChange = () => {
+    console.log('onChildCheckboxChange')
+    // обновляем состояние родителей
+    if (this.root instanceof ElmaListNodeCategory) {
+      this.root.updateCheckboxState()
+    }
+
+    // обновляем состояние детей
+    if (this instanceof ElmaListNodeCategory) {
+      // ...
+    }
+  }
+
   getItem() {
-    this.item = ElmaListItem.getItem(this.node.item)
+    this.item = ElmaListItem.getItem(this.node.item, this.onChildCheckboxChange)
   }
 
   get template() {
     return `<li class="nodeRoot"></li>`
+  }
+
+  get _data() {
+    return this.node
   }
 
   remove() {
@@ -57,6 +74,36 @@ export class ElmaListNodeCategory extends ElmaListNode {
     super(root, node)
     this.createChildrenNodes()
     this.render()
+  }
+
+  updateCheckboxState() {
+    console.log('updateCheckboxState')
+    if (this.item instanceof ElmaListItemCheckbox) {
+      const checkboxes = this.getChildCheckboxes()
+      const checkedCount = checkboxes.filter((c) => c.checked).length
+      const total = checkboxes.length
+      console.log('first', total, checkedCount, checkboxes)
+
+      this.item.setState(checkedCount, total)
+
+      if (this.root instanceof ElmaListNodeCategory) {
+        this.root.updateCheckboxState()
+      }
+    }
+  }
+
+  private getChildCheckboxes(): CheckboxItem[] {
+    const checkboxes: CheckboxItem[] = []
+    this.children.forEach((child) => {
+      if (child instanceof ElmaListNodeCategory) {
+        checkboxes.push(...child.getChildCheckboxes())
+      } else if (child.item instanceof ElmaListItemCheckbox) {
+        checkboxes.push(child.item.getItemData())
+      }
+    })
+
+    console.log('checkboxes', checkboxes)
+    return checkboxes
   }
 
   createChildrenNodes() {

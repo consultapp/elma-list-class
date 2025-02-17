@@ -66,6 +66,44 @@ export const mockData: TDataNode[] = [
       name: 'SUPPLY',
       type: 'checkbox',
     },
+    category: {
+      isExpanded: true,
+    },
+    children: [
+      {
+        id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
+        item: {
+          name: 'Элемент  3_0',
+          type: 'checkbox',
+        },
+        category: {
+          isExpanded: true,
+        },
+        children: [
+          {
+            id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
+            item: {
+              name: 'Элемент  3_0',
+              type: 'checkbox',
+            },
+          },
+          {
+            id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
+            item: {
+              name: 'Элемент уровня 3_2',
+              type: 'checkbox',
+            },
+          },
+        ],
+      },
+      {
+        id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
+        item: {
+          name: 'Элемент уровня 3_1',
+          type: 'checkbox',
+        },
+      },
+    ],
   },
   {
     id: '0194ef55-9d98-7905-8055-2d4e1860ca08',
