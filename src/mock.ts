@@ -83,7 +83,7 @@ export const mockData: TDataNode[] = [
           {
             id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
             item: {
-              name: 'Элемент  3_0',
+              name: 'Элемент  3_1',
               type: 'checkbox',
             },
           },
@@ -99,7 +99,7 @@ export const mockData: TDataNode[] = [
       {
         id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
         item: {
-          name: 'Элемент уровня 3_1',
+          name: 'Элемент уровня 4_0',
           type: 'checkbox',
         },
       },

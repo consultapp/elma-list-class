@@ -16,7 +16,7 @@ export class ElmaListItem<T extends TListItem> {
     return `<span>${this.data.name}</span>`
   }
 
-  getItemData() {
+  get itemData(): T {
     return this.data
   }
 
@@ -56,9 +56,18 @@ export class ElmaListItemCheckbox extends ElmaListItem<CheckboxItem> {
     this.onCheckboxChange?.()
   }
 
-  setState(checkedCount: number, total: number) {
+  setAnalizedState(checkedCount: number, total: number) {
     this.data.checked = checkedCount === total
     this.data.indeterminate = checkedCount > 0 && checkedCount < total
+
+    if (this.checkbox) {
+      this.checkbox.checked = this.data.checked
+      this.checkbox.indeterminate = this.data.indeterminate
+    }
+  }
+  setState(checked: boolean) {
+    this.data.checked = checked
+    this.data.indeterminate = false
 
     if (this.checkbox) {
       this.checkbox.checked = this.data.checked
