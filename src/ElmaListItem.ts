@@ -1,6 +1,7 @@
-export class ElmaListItem {
-  public element: Element | undefined
-  constructor(protected data: TListItem) {
+export class ElmaListItem<T extends TListItem> {
+  public element: HTMLElement | undefined
+
+  constructor(protected data: T) {
     this.createDomElement()
   }
 
@@ -8,14 +9,14 @@ export class ElmaListItem {
     if (this.element) this.element.remove()
     const wrapper = document.createElement('div')
     wrapper.innerHTML = this.template
-    this.element = wrapper.children[0] as HTMLLIElement
+    this.element = wrapper.children[0] as HTMLElement
   }
 
-  get template() {
-    return `<span> ${this.data.name}<span>`
+  get template(): string {
+    return `<span>${this.data.name}</span>`
   }
 
-  static getItem(data: TListItem) {
+  static getItem(data: TListItem): ElmaListItem<TListItem> {
     switch (data.type) {
       case 'plain':
         return new ElmaListItem(data)
@@ -29,25 +30,42 @@ export class ElmaListItem {
   }
 }
 
-class ElmaListItemCheckbox extends ElmaListItem {
+class ElmaListItemCheckbox extends ElmaListItem<CheckboxItem> {
+  private checkbox: HTMLInputElement | null = null
+
   createDomElement() {
-    if (this.element) this.element.remove()
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = this.template
-    this.element = wrapper.children[0] as HTMLLIElement
+    super.createDomElement()
+    this.checkbox =
+      this.element?.querySelector('input[type="checkbox"]') || null
+    this.checkbox?.addEventListener('change', () => this.toggle())
   }
 
-  get template() {
-    return `<label><input type="checkbox"  /> ${this.data.name}</label>`
+  toggle() {
+    if (this.checkbox) {
+      this.data.checked = this.checkbox.checked
+    }
+  }
+
+  get template(): string {
+    return `
+      <label>
+        <input type="checkbox" ${this.data.checked ? 'checked' : ''} />
+        ${this.data.name}
+      </label>
+    `
   }
 }
 
-class ElmaListItemAnchor extends ElmaListItem {
+class ElmaListItemAnchor extends ElmaListItem<AnchorItem> {
   createDomElement() {
-    const data = this.data as TAnchorItem
-    if (this.element) this.element.remove()
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = `<a href="${data.href}"> ${data.name}</a>`
-    this.element = wrapper.children[0] as HTMLLIElement
+    super.createDomElement()
+    const anchor = this.element?.querySelector('a')
+    if (anchor) {
+      anchor.href = this.data.href
+    }
+  }
+
+  get template(): string {
+    return `<a>${this.data.name}</a>`
   }
 }

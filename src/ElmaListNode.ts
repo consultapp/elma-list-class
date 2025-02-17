@@ -2,7 +2,7 @@ import { ElmaListItem } from './ElmaListItem.ts'
 
 export class ElmaListNode {
   public element: HTMLLIElement | undefined
-  protected item: ElmaListItem | undefined
+  protected item: ElmaListItem<TListItem> | undefined
   constructor(protected root: ElmaListNode | null, protected node: TTreeNode) {
     this.createDomElement()
     if (!this.node._isCategory) this.render()

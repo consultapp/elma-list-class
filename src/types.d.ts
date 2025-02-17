@@ -15,25 +15,24 @@ type TCategory = {
   isExpanded?: boolean
 }
 
-type TListItem = TCheckBoxItem | TAnchorItem | TPlainItem
+type TListItem = PlainItem | CheckboxItem | AnchorItem
 
-type TItemType = 'checkbox' | 'plain' | 'anchor'
-
-type TCheckBoxItem = {
-  type: 'checkbox'
+interface BaseItem {
+  type: string
   name: string
-  selected?: boolean
+}
+
+interface PlainItem extends BaseItem {
+  type: 'plain'
+}
+
+interface CheckboxItem extends BaseItem {
+  type: 'checkbox'
+  checked?: boolean
   indeterminate?: boolean
 }
 
-type TPlainItem = {
-  type: 'plain'
-  name: string
-}
-
-type TAnchorItem = {
+interface AnchorItem extends BaseItem {
   type: 'anchor'
-  name: string
   href: string
-  target?: '_blank'
 }
