@@ -61,7 +61,7 @@ export class ElmaListClass {
     <ul class="${this.className}">
       <style>
         .${this.className} ul, li{
-          list-style: none;
+          list-style: disc;
         }
         .${this.className} details > summary {
           cursor: pointer;

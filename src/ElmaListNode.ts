@@ -29,19 +29,22 @@ export class ElmaListNode {
   }
 
   onCheckboxChange = () => {
+    // обновляем состояние детей
+    if (
+      this instanceof ElmaListNodeCategory &&
+      this.item instanceof ElmaListItemCheckbox
+    ) {
+      console.log('onCheckboxChange childs', this.item?.itemData.checked)
+      this.recursiveStateUpdate(
+        Boolean((this.item?.itemData as CheckboxItem).checked)
+      )
+    }
+
     // обновляем состояние родителей
     if (this.root instanceof ElmaListNodeCategory) {
       console.log('onCheckboxChange parents')
 
       this.root.updateCheckboxState()
-    }
-
-    // обновляем состояние детей
-    if (this instanceof ElmaListNodeCategory) {
-      // console.log('onCheckboxChange childs', this.item?.itemData.checked)
-      // this.recursiveStateUpdate(
-      //   Boolean((this.item?.itemData as CheckboxItem).checked)
-      // )
     }
   }
 
@@ -81,7 +84,7 @@ export class ElmaListNodeCategory extends ElmaListNode {
   }
 
   updateCheckboxState() {
-    console.log('updateCheckboxState')
+    console.log('updateCheckboxState', this.node.item.name)
     if (this.item instanceof ElmaListItemCheckbox) {
       const checkboxes = this.getChildCheckboxItems()
       const checkedCount = checkboxes.filter((c) => c.itemData.checked).length
@@ -95,12 +98,21 @@ export class ElmaListNodeCategory extends ElmaListNode {
       }
     }
   }
+
   recursiveStateUpdate(checked: boolean) {
-    // const checkboxes = this.getChildCheckboxes()
+    const checkboxes = this.getChildCheckboxItems()
+    console.log('recursiveStateUpdate:', checked, checkboxes)
+    checkboxes.forEach((c) => c.setState(checked))
   }
 
   private getChildCheckboxItems(): ElmaListItemCheckbox[] {
     const checkboxes: ElmaListItemCheckbox[] = []
+    if (
+      this.item instanceof ElmaListItemCheckbox &&
+      this.item.checkbox?.checked
+    ) {
+      checkboxes.push(this.item)
+    }
     this.children.forEach((child) => {
       if (child instanceof ElmaListNodeCategory) {
         checkboxes.push(...child.getChildCheckboxItems())
@@ -108,7 +120,7 @@ export class ElmaListNodeCategory extends ElmaListNode {
         checkboxes.push(child.item)
       }
     })
-    console.log('checkboxes', checkboxes)
+    console.log('-->checkboxes', this.node.item.name, checkboxes)
     return checkboxes
   }
 
