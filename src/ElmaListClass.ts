@@ -66,6 +66,20 @@ export class ElmaListClass {
         .${this.className} details > summary {
           cursor: pointer;
         }
+        .${this.className} details summary {
+          list-style: none;
+          cursor: pointer;
+        }
+        .${this.className} details summary::-webkit-details-marker {
+          display: none;
+        }
+        .${this.className} details summary::before {
+          content: "➕";
+          margin-right: 8px;
+        }
+        .${this.className} details[open] summary::before {
+          content: "➖";
+        }
       </style>
     </li>`
   }
