@@ -1,9 +1,19 @@
+import { Props } from './ElmaListClass.ts'
 import { ElmaListItem, ElmaListItemCheckbox } from './ElmaListItem.ts'
 
 export class ElmaListNode {
   public element: HTMLLIElement | undefined
   public item: ElmaListItem<TListItem> | undefined
-  constructor(protected root: ElmaListNode | null, protected node: TTreeNode) {
+  constructor(
+    protected root: ElmaListNode | null,
+    protected node: TTreeNode,
+    protected props: Props = {
+      marker: {
+        open: '+',
+        closed: '-',
+      },
+    }
+  ) {
     this.createDomElement()
     if (!this.node._isCategory) this.render()
   }
@@ -77,8 +87,12 @@ export class ElmaListNodeCategory extends ElmaListNode {
   public children: ElmaListNode[] = []
   protected childrenWrapper: Element | undefined | null
 
-  constructor(protected root: ElmaListNode | null, protected node: TTreeNode) {
-    super(root, node)
+  constructor(
+    protected root: ElmaListNode | null,
+    protected node: TTreeNode,
+    protected props: Props
+  ) {
+    super(root, node, props)
     this.createChildrenNodes()
     this.render()
   }
@@ -128,8 +142,8 @@ export class ElmaListNodeCategory extends ElmaListNode {
     const children = this.node.children ?? []
     this.children = (children as TTreeNode[]).map((t) =>
       t._isCategory
-        ? new ElmaListNodeCategory(this, t)
-        : new ElmaListNode(this, t)
+        ? new ElmaListNodeCategory(this, t, this.props)
+        : new ElmaListNode(this, t, this.props)
     )
   }
 

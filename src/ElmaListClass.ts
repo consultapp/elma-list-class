@@ -1,20 +1,35 @@
 import { ElmaListNode, ElmaListNodeCategory } from './ElmaListNode'
 
+export type Props = {
+  marker?: {
+    open: string
+    closed: string
+  }
+}
+
 export class ElmaListClass {
   tree: TTreeNode[]
   element = this.createDomElement()
   rootNodes: ElmaListNode[]
 
   constructor(
-    private data: TDataNode[],
-    private className: string = 'nodeRoot'
+    public data: TDataNode[],
+    private className: string = 'nodeRoot',
+    public props: Props = {
+      marker: {
+        open: '➕',
+        closed: '➖',
+      },
+    }
   ) {
+    console.log('this.props111', props)
+
     this.data.forEach((d) => this.buildTreeNodeFromData(d))
     this.tree = this.data as TTreeNode[]
     this.rootNodes = this.tree.map((t) =>
       t._isCategory
-        ? new ElmaListNodeCategory(null, t)
-        : new ElmaListNode(null, t)
+        ? new ElmaListNodeCategory(null, t, props)
+        : new ElmaListNode(null, t, props)
     )
   }
 
@@ -57,6 +72,7 @@ export class ElmaListClass {
   }
 
   get template() {
+    console.log('this.props', this)
     return `
     <ul class="${this.className}">
       <style>
@@ -64,7 +80,6 @@ export class ElmaListClass {
           list-style: none;
           margin:0;
         }
-
         .${this.className} details summary, 
         .${this.className} details summary::-webkit-details-marker {
           list-style: none;
@@ -73,19 +88,17 @@ export class ElmaListClass {
           display: flex;
           align-items: center;
         }
-
         .${this.className}  details > summary::before {
-          content: "➕";
+          content: "${this.props?.marker?.closed ?? '➕'}";
           margin-right: 8px;
         }
         .${this.className} details[open] > summary::before {
-          content: "➖";
+          content: "${this.props?.marker?.closed ?? '➖'}";
 
         }
         .${this.className} .nodeRoot__single{
           margin-left: 24px;
         }
-
         .${this.className} input {
           margin:0;
           cursor: pointer;
