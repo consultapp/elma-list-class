@@ -44,7 +44,6 @@ export class ElmaListNode {
       this instanceof ElmaListNodeCategory &&
       this.item instanceof ElmaListItemCheckbox
     ) {
-      console.log('onCheckboxChange childs', this.item?.itemData.checked)
       this.recursiveStateUpdate(
         Boolean((this.item?.itemData as CheckboxItem).checked)
       )
@@ -52,8 +51,6 @@ export class ElmaListNode {
 
     // обновляем состояние родителей
     if (this.root instanceof ElmaListNodeCategory) {
-      console.log('onCheckboxChange parents')
-
       this.root.updateCheckboxState()
     }
   }
@@ -98,12 +95,10 @@ export class ElmaListNodeCategory extends ElmaListNode {
   }
 
   updateCheckboxState() {
-    console.log('updateCheckboxState', this.node.item.name)
     if (this.item instanceof ElmaListItemCheckbox) {
       const checkboxes = this.getChildCheckboxItems()
       const checkedCount = checkboxes.filter((c) => c.itemData.checked).length
       const total = checkboxes.length
-      console.log('first', total, checkedCount, checkboxes)
 
       this.item.setAnalizedState(checkedCount, total)
 
@@ -114,9 +109,7 @@ export class ElmaListNodeCategory extends ElmaListNode {
   }
 
   recursiveStateUpdate(checked: boolean) {
-    const checkboxes = this.getChildCheckboxItems()
-    console.log('recursiveStateUpdate:', checked, checkboxes)
-    checkboxes.forEach((c) => c.setState(checked))
+    this.getChildCheckboxItems().forEach((c) => c.setState(checked))
   }
 
   private getChildCheckboxItems(): ElmaListItemCheckbox[] {
@@ -134,7 +127,6 @@ export class ElmaListNodeCategory extends ElmaListNode {
         checkboxes.push(child.item)
       }
     })
-    console.log('-->checkboxes', this.node.item.name, checkboxes)
     return checkboxes
   }
 

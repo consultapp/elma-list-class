@@ -70,7 +70,6 @@ export class ElmaListClass {
   }
 
   get template() {
-    console.log('this.props', this)
     return `
     <ul class="${this.className}">
       <style>

@@ -99,6 +99,6 @@ class ElmaListItemAnchor extends ElmaListItem<AnchorItem> {
   }
 
   get template(): string {
-    return `<a>${this.data.name}</a>`
+    return `<a href=" ${this.data.href}">${this.data.name}</a>`
   }
 }
