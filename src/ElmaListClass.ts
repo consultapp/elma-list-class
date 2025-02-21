@@ -61,24 +61,34 @@ export class ElmaListClass {
     <ul class="${this.className}">
       <style>
         .${this.className} ul, li{
-          list-style: disc;
+          list-style: none;
+          margin:0;
         }
-        .${this.className} details > summary {
-          cursor: pointer;
-        }
-        .${this.className} details summary {
+
+        .${this.className} details summary, 
+        .${this.className} details summary::-webkit-details-marker {
           list-style: none;
           cursor: pointer;
+
+          display: flex;
+          align-items: center;
         }
-        .${this.className} details summary::-webkit-details-marker {
-          display: none;
-        }
-        .${this.className} details summary::before {
+
+        .${this.className}  details > summary::before {
           content: "➕";
           margin-right: 8px;
         }
-        .${this.className} details[open] summary::before {
+        .${this.className} details[open] > summary::before {
           content: "➖";
+
+        }
+        .${this.className} .nodeRoot__single{
+          margin-left: 24px;
+        }
+
+        .${this.className} input {
+          margin:0;
+          cursor: pointer;
         }
       </style>
     </li>`

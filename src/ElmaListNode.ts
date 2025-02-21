@@ -53,7 +53,7 @@ export class ElmaListNode {
   }
 
   get template() {
-    return `<li class="nodeRoot"></li>`
+    return `<li class="nodeRoot nodeRoot__single"></li>`
   }
 
   get _data() {
@@ -150,12 +150,17 @@ export class ElmaListNodeCategory extends ElmaListNode {
     wrapper.innerHTML = this.template
     this.element = wrapper.children[0] as HTMLLIElement
     this.element.querySelector('summary')?.append(this.item?.element ?? '')
+
+    const detailsElement = this.element.querySelector('details')
+    if (detailsElement) {
+      detailsElement.open = this.node.category?.isExpanded ?? true
+    }
   }
 
   get template() {
     return `
       <li class="nodeRoot">
-          <details ${this.node.category?.isExpanded ? 'open' : ''}>
+          <details >
             <summary></summary>
             <ul class="category" data-childrenWrapper="true"></ul>
           </details>
