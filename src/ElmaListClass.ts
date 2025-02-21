@@ -22,8 +22,6 @@ export class ElmaListClass {
       },
     }
   ) {
-    console.log('this.props111', props)
-
     this.data.forEach((d) => this.buildTreeNodeFromData(d))
     this.tree = this.data as TTreeNode[]
     this.rootNodes = this.tree.map((t) =>
@@ -84,7 +82,6 @@ export class ElmaListClass {
         .${this.className} details summary::-webkit-details-marker {
           list-style: none;
           cursor: pointer;
-
           display: flex;
           align-items: center;
         }
@@ -105,6 +102,24 @@ export class ElmaListClass {
         }
       </style>
     </li>`
+  }
+
+  getChecked() {
+    return this.tree.map((r) => ElmaListClass.getRecursiveChecked(r)).flat()
+  }
+
+  static getRecursiveChecked(node: TTreeNode): string[] {
+    const result: string[] = []
+    if (node.item.type === 'checkbox' && node.item.checked) {
+      result.push(node.id)
+    }
+
+    if (node._isCategory) {
+      node.children?.forEach((c) =>
+        result.push(...ElmaListClass.getRecursiveChecked(c as TTreeNode))
+      )
+    }
+    return result
   }
 
   remove() {

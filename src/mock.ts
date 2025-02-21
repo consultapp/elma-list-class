@@ -1,55 +1,54 @@
 export const mockData: TDataNode[] = [
   {
-    id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9052',
+    id: '1',
     item: {
-      name: 'Lorem....',
+      name: '1 Lorem....',
       type: 'plain',
     },
   },
   {
-    id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9051',
+    id: '2',
     category: { isExpanded: true },
-
     item: {
-      name: 'BUSINESS MODEL',
+      name: '2 BUSINESS MODEL',
       type: 'anchor',
       href: '#',
     },
     children: [
       {
-        id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9052',
+        id: '2_0',
         item: {
-          name: 'Элемент второго уровня 1',
+          name: '2_0 Элемент второго уровня 1',
           type: 'plain',
         },
         children: [
           {
-            id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
+            id: '2_0_0',
             item: {
-              name: 'Элемент третьего уровня 1',
+              name: '2_0_0 Элемент третьего уровня 1',
               type: 'plain',
             },
           },
         ],
       },
       {
-        id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9053',
+        id: '2_1',
         item: {
-          name: 'Элемент второго уровня 2',
+          name: '2_1 Элемент второго уровня 2',
           type: 'checkbox',
         },
         children: [
           {
-            id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
+            id: '2_1_0',
             item: {
-              name: 'Элемент третьего уровня 2_0',
+              name: '2_1_0 Элемент третьего уровня 2_0',
               type: 'checkbox',
             },
           },
           {
-            id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
+            id: '2_1_1',
             item: {
-              name: 'Элемент третьего уровня 2_1',
+              name: '2_1_1 Элемент третьего уровня 2_1',
               type: 'checkbox',
             },
           },
@@ -61,9 +60,9 @@ export const mockData: TDataNode[] = [
     ],
   },
   {
-    id: '0194ef55-9d98-7905-8055-2d4e1860ca08',
+    id: '3',
     item: {
-      name: 'SUPPLY',
+      name: '3 SUPPLY',
       type: 'checkbox',
     },
     category: {
@@ -71,9 +70,9 @@ export const mockData: TDataNode[] = [
     },
     children: [
       {
-        id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
+        id: '3_0',
         item: {
-          name: 'Элемент  3_0',
+          name: '3_0 Элемент 3_0',
           type: 'checkbox',
         },
         category: {
@@ -81,34 +80,34 @@ export const mockData: TDataNode[] = [
         },
         children: [
           {
-            id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
+            id: '3_0_0',
             item: {
-              name: 'Элемент  3_1',
+              name: '3_0_0 Элемент 3_1',
               type: 'checkbox',
             },
           },
           {
-            id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
+            id: '3_0_1',
             item: {
-              name: 'Элемент уровня 3_2',
+              name: '3_0_1 Элемент уровня 3_2',
               type: 'checkbox',
             },
           },
         ],
       },
       {
-        id: '0194ef54-c39e-7a40-8dd4-0aaea4fa9055',
+        id: '3_1',
         item: {
-          name: 'Элемент уровня 4_0',
+          name: '3_1 Элемент уровня 4_0',
           type: 'checkbox',
         },
       },
     ],
   },
   {
-    id: '0194ef55-9d98-7905-8055-2d4e1860ca08',
+    id: '4',
     item: {
-      name: 'SUPPLY2',
+      name: '4 SUPPLY2',
       type: 'anchor',
       href: '#',
     },
