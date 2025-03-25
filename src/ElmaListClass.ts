@@ -100,7 +100,7 @@ export class ElmaListClass {
           cursor: pointer;
         }
       </style>
-    </li>`
+    </ul>`
   }
 
   getChecked() {

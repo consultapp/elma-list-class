@@ -15,24 +15,24 @@ type TCategory = {
   isExpanded?: boolean
 }
 
-type TListItem = PlainItem | CheckboxItem | AnchorItem
+type TListItem =
+  | (PlainItem & { type: 'plain' })
+  | (CheckboxItem & { type: 'checkbox' })
+  | (AnchorItem & { type: 'anchor' })
 
 interface BaseItem {
-  type: string
-  name: string
+  label: string
 }
 
-interface PlainItem extends BaseItem {
-  type: 'plain'
-}
+type ItemListType = 'plain' | 'checkbox' | 'anchor'
+
+interface PlainItem extends BaseItem {}
 
 interface CheckboxItem extends BaseItem {
-  type: 'checkbox'
   checked?: boolean
   indeterminate?: boolean
 }
 
 interface AnchorItem extends BaseItem {
-  type: 'anchor'
   href: string
 }
