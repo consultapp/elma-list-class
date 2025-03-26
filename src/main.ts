@@ -28,7 +28,12 @@ const root = new ProactorListNode(
             new ProactorListNode(
               'leaf4',
               {
-                item: { label: 'Leaf 4', type: 'plain' },
+                item: {
+                  label: 'Leaf 4',
+                  type: 'anchor',
+                  href: '#',
+                  target: '_blank',
+                },
               },
               [
                 new ProactorListNode('leaf4', {

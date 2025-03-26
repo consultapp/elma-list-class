@@ -8,8 +8,10 @@ export class ProactorListNode {
   checked: boolean = false
   indeterminate: boolean
   parent: ProactorListNode | null
-  private element: HTMLLIElement | null = null
+  private element: HTMLLIElement = document.createElement('li')
   private checkboxElement: HTMLInputElement | null = null
+  private details: HTMLDetailsElement = document.createElement('details')
+  private summary = document.createElement('summary')
 
   constructor(
     public id: string,
@@ -30,22 +32,76 @@ export class ProactorListNode {
     }
   }
 
-  render(): HTMLLIElement {
-    if (!this.element) {
-      this.element = document.createElement('li')
-      if (this.props.item.type === 'checkbox') this.#renderCheckbox()
-      else if (this.props.item.type === 'plain') this.#renderPlain()
+  isCategory() {
+    return Boolean(this.children.length)
+  }
 
-      // Рендерим детей
-      if (this.children.length > 0) {
-        const ul = document.createElement('ul')
-        this.children.forEach((child) => ul.appendChild(child.render()))
-        this.element.appendChild(ul)
-      }
+  render(): HTMLLIElement {
+    if (this.isCategory()) {
+      this.details.open = true
+      this.details.appendChild(this.summary)
+      this.element.appendChild(this.details)
+    }
+
+    if (this.props.item.type === 'checkbox') this.#renderCheckbox()
+    else if (this.props.item.type === 'anchor') this.#renderAnchor()
+    else if (this.props.item.type === 'plain') this.#renderPlain()
+
+    // Рендерим детей
+    if (this.children.length > 0) {
+      const ul = document.createElement('ul')
+      this.children.forEach((child) => ul.appendChild(child.render()))
+
+      const mountPoint = this.isCategory() ? this.details : this.element
+      mountPoint.appendChild(ul)
     }
 
     this.updateElementState()
     return this.element
+  }
+
+  #renderCheckbox() {
+    if (this.element && this.props.item.type === 'checkbox') {
+      this.checkboxElement = document.createElement('input')
+
+      // Создаем элементы
+      this.checkboxElement.type = 'checkbox'
+      this.checkboxElement.id = this.id
+      this.checkboxElement.addEventListener('change', () => {
+        this.toggle()
+        console.log('this', this)
+      })
+
+      const label = document.createElement('label')
+      label.htmlFor = this.id
+      label.textContent = this.label
+
+      const mountPoint = this.isCategory() ? this.summary : this.element
+      mountPoint.appendChild(this.checkboxElement)
+      mountPoint.appendChild(label)
+    }
+  }
+  #renderPlain() {
+    if (this.element && this.props.item.type === 'plain') {
+      const label = document.createElement('label')
+      label.htmlFor = this.id
+      label.textContent = this.label
+
+      const mountPoint = this.isCategory() ? this.summary : this.element
+      mountPoint.appendChild(label)
+    }
+  }
+
+  #renderAnchor() {
+    if (this.element && this.props.item.type === 'anchor') {
+      const anchor = document.createElement('a')
+      anchor.textContent = this.label
+      anchor.href = anchor.href = this.props.item.href ?? ''
+      anchor.target = anchor.href = this.props.item.target ?? ''
+
+      const mountPoint = this.isCategory() ? this.summary : this.element
+      mountPoint.appendChild(anchor)
+    }
   }
 
   private updateElementState() {
@@ -100,36 +156,6 @@ export class ProactorListNode {
       currentParent.updateElementState()
 
       currentParent = currentParent.parent
-    }
-  }
-
-  #renderCheckbox() {
-    if (this.element) {
-      this.checkboxElement = document.createElement('input')
-
-      // Создаем элементы
-      this.checkboxElement.type = 'checkbox'
-      this.checkboxElement.id = this.id
-      this.checkboxElement.addEventListener('change', () => {
-        this.toggle()
-        console.log('this', this)
-      })
-
-      const label = document.createElement('label')
-      label.htmlFor = this.id
-      label.textContent = this.label
-
-      // Собираем структуру
-      this.element.appendChild(this.checkboxElement)
-      this.element.appendChild(label)
-    }
-  }
-  #renderPlain() {
-    if (this.element) {
-      const label = document.createElement('label')
-      label.htmlFor = this.id
-      label.textContent = this.label
-      this.element.appendChild(label)
     }
   }
 }

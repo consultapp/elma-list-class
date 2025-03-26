@@ -3,7 +3,7 @@ type ID = string
 type TDataNode = {
   id: ID
   item: TListItem
-  category?: TCategory
+  category?: TItemCategory
   children?: TDataNode[]
 }
 
@@ -11,7 +11,7 @@ type TTreeNode = TDataNode & {
   _isCategory: boolean
 }
 
-type TCategory = {
+type TItemCategory = {
   isExpanded?: boolean
 }
 
@@ -20,19 +20,20 @@ type TListItem =
   | (CheckboxItem & { type: 'checkbox' })
   | (AnchorItem & { type: 'anchor' })
 
-interface BaseItem {
+interface BaseCommonItem {
   label: string
 }
 
 type ItemListType = 'plain' | 'checkbox' | 'anchor'
 
-interface PlainItem extends BaseItem {}
+interface PlainItem extends BaseCommonItem {}
 
-interface CheckboxItem extends BaseItem {
+interface CheckboxItem extends BaseCommonItem {
   checked?: boolean
   indeterminate?: boolean
 }
 
-interface AnchorItem extends BaseItem {
+interface AnchorItem extends BaseCommonItem {
   href: string
+  target?: string
 }
