@@ -1,5 +1,3 @@
-// import { ElmaListNode, ElmaListNodeCategory } from './ProactorListNode'
-
 // export type Props = {
 //   marker?: {
 //     open: string

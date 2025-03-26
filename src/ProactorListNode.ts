@@ -16,7 +16,8 @@ export class ProactorListNode {
   constructor(
     public id: string,
     public props: NodeProps,
-    public children: ProactorListNode[] = []
+    public children: ProactorListNode[] = [],
+    private isExpanded: boolean = false
   ) {
     this.id = id
     this.label = props.item.label
@@ -37,34 +38,41 @@ export class ProactorListNode {
   }
 
   render(): HTMLLIElement {
-    if (this.isCategory()) {
-      this.details.open = true
-      this.details.appendChild(this.summary)
-      this.element.appendChild(this.details)
-    }
-
-    if (this.props.item.type === 'checkbox') this.#renderCheckbox()
-    else if (this.props.item.type === 'anchor') this.#renderAnchor()
-    else if (this.props.item.type === 'plain') this.#renderPlain()
-
-    // Рендерим детей
-    if (this.children.length > 0) {
-      const ul = document.createElement('ul')
-      this.children.forEach((child) => ul.appendChild(child.render()))
-
-      const mountPoint = this.isCategory() ? this.details : this.element
-      mountPoint.appendChild(ul)
-    }
+    this.#renderCategory()
+    this.#renderItem()
+    this.#renderChilds()
 
     this.updateElementState()
     return this.element
+  }
+
+  #renderChilds() {
+    if (this.children.length > 0) {
+      const ul = document.createElement('ul')
+      this.children.forEach((child) => ul.appendChild(child.render()))
+      const mountPoint = this.isCategory() ? this.details : this.element
+      mountPoint.appendChild(ul)
+    }
+  }
+
+  #renderCategory() {
+    if (this.isCategory()) {
+      this.details.open = this.isExpanded ?? true
+      this.details.appendChild(this.summary)
+      this.element.appendChild(this.details)
+    }
+  }
+
+  #renderItem() {
+    if (this.props.item.type === 'checkbox') this.#renderCheckbox()
+    else if (this.props.item.type === 'anchor') this.#renderAnchor()
+    else if (this.props.item.type === 'plain') this.#renderPlain()
   }
 
   #renderCheckbox() {
     if (this.element && this.props.item.type === 'checkbox') {
       this.checkboxElement = document.createElement('input')
 
-      // Создаем элементы
       this.checkboxElement.type = 'checkbox'
       this.checkboxElement.id = this.id
 
@@ -170,6 +178,7 @@ export class ProactorListNode {
 
     this.element.remove()
     this.details.remove()
+    this.summary.remove()
 
     this.children.forEach((child) => child.destroy())
 
