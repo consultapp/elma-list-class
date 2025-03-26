@@ -1,62 +1,31 @@
+import { mockData } from './mock'
 import { ProactorListNode } from './ProactorListNode'
 
-const root = new ProactorListNode(
-  'root',
+function convertHierarchy(nodes: TDataNode[]): ProactorListNode[] {
+  return nodes.map((node) => {
+    const props = {
+      item: {
+        ...node.item,
+        ...(node.item.type === 'checkbox' && { checked: true }),
+        ...(node.item.type === 'anchor' && { target: '_blank' }), // Пример автоматического добавления target
+      },
+    }
 
-  { item: { label: 'Root', type: 'checkbox', checked: true } },
-  [
-    new ProactorListNode(
-      'child1',
-      { item: { label: 'Child 1', type: 'checkbox', checked: true } },
-      [
-        new ProactorListNode('leaf1', {
-          item: { label: 'Leaf 1', type: 'checkbox', checked: true },
-        }),
-        new ProactorListNode('leaf2', {
-          item: { label: 'Leaf 2', type: 'checkbox', checked: true },
-        }),
-      ]
-    ),
-    new ProactorListNode(
-      'child2',
-      { item: { label: 'Child 2', type: 'checkbox', checked: true } },
-      [
-        new ProactorListNode(
-          'child_2_1',
-          { item: { label: 'Child 2_1', type: 'checkbox', checked: true } },
-          [
-            new ProactorListNode(
-              'leaf4',
-              {
-                item: {
-                  label: 'Leaf 4',
-                  type: 'anchor',
-                  href: '#',
-                  target: '_blank',
-                },
-              },
-              [
-                new ProactorListNode('leaf4', {
-                  item: { label: 'Leaf 4', type: 'plain' },
-                }),
-                new ProactorListNode('leaf2', {
-                  item: { label: 'Leaf 2', type: 'checkbox', checked: true },
-                }),
-              ]
-            ),
-            new ProactorListNode('leaf2', {
-              item: { label: 'Leaf 2', type: 'checkbox', checked: true },
-            }),
-          ]
-        ),
-        new ProactorListNode('child_2_2', {
-          item: { label: 'Child 2_2', type: 'checkbox', checked: true },
-        }),
-      ]
-    ),
-  ]
-)
+    const children = node.children ? convertHierarchy(node.children) : []
 
+    return new ProactorListNode(
+      node.id,
+      props,
+      children,
+      node.category?.isExpanded
+    )
+  })
+}
+
+const proactorNodes: ProactorListNode[] = convertHierarchy(mockData)
 const container = document.createElement('ul')
-container.appendChild(root.render())
+proactorNodes.forEach((r) => {
+  container.appendChild(r.render())
+})
+
 document.body.appendChild(container)
