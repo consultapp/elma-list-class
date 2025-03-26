@@ -3,7 +3,6 @@ type NodeProps = {
 }
 
 export class ProactorListNode {
-  // id: string
   label: string
   checked: boolean = false
   indeterminate: boolean
@@ -12,6 +11,7 @@ export class ProactorListNode {
   private checkboxElement: HTMLInputElement | null = null
   private details: HTMLDetailsElement = document.createElement('details')
   private summary = document.createElement('summary')
+  private abortController: AbortController | null = null
 
   constructor(
     public id: string,
@@ -67,10 +67,16 @@ export class ProactorListNode {
       // Создаем элементы
       this.checkboxElement.type = 'checkbox'
       this.checkboxElement.id = this.id
-      this.checkboxElement.addEventListener('change', () => {
-        this.toggle()
-        console.log('this', this)
-      })
+
+      this.abortController = new AbortController()
+      this.checkboxElement.addEventListener(
+        'change',
+        () => {
+          this.toggle()
+          console.log('this', this)
+        },
+        { signal: this.abortController.signal }
+      )
 
       const label = document.createElement('label')
       label.htmlFor = this.id
@@ -157,5 +163,21 @@ export class ProactorListNode {
 
       currentParent = currentParent.parent
     }
+  }
+
+  destroy() {
+    if (this.abortController) this.abortController.abort()
+
+    this.element.remove()
+    this.details.remove()
+
+    this.children.forEach((child) => child.destroy())
+
+    this.element = null!
+    this.checkboxElement = null
+    this.details = null!
+    this.summary = null!
+    this.parent = null
+    this.children = []
   }
 }
