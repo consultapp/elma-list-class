@@ -2,7 +2,7 @@ export const mockData: TDataNode[] = [
   {
     id: '1',
     item: {
-      name: '1 element',
+      label: '1 element',
       type: 'plain',
     },
   },
@@ -10,7 +10,7 @@ export const mockData: TDataNode[] = [
     id: '2',
     category: { isExpanded: true },
     item: {
-      name: '2 element',
+      label: '2 element',
       type: 'anchor',
       href: '#',
     },
@@ -18,14 +18,14 @@ export const mockData: TDataNode[] = [
       {
         id: '2_0',
         item: {
-          name: '2_0 element',
+          label: '2_0 element',
           type: 'plain',
         },
         children: [
           {
             id: '2_0_0',
             item: {
-              name: '2_0_0 element',
+              label: '2_0_0 element',
               type: 'plain',
             },
           },
@@ -34,21 +34,21 @@ export const mockData: TDataNode[] = [
       {
         id: '2_1',
         item: {
-          name: '2_1 element',
+          label: '2_1 element',
           type: 'checkbox',
         },
         children: [
           {
             id: '2_1_0',
             item: {
-              name: '2_1_0 element',
+              label: '2_1_0 element',
               type: 'checkbox',
             },
           },
           {
             id: '2_1_1',
             item: {
-              name: '2_1_1 element',
+              label: '2_1_1 element',
               type: 'checkbox',
             },
           },
@@ -62,7 +62,7 @@ export const mockData: TDataNode[] = [
   {
     id: '3',
     item: {
-      name: '3 element',
+      label: '3 element',
       type: 'checkbox',
     },
     category: {
@@ -72,7 +72,7 @@ export const mockData: TDataNode[] = [
       {
         id: '3_0',
         item: {
-          name: '3_0 element',
+          label: '3_0 element',
           type: 'checkbox',
         },
         category: {
@@ -82,14 +82,14 @@ export const mockData: TDataNode[] = [
           {
             id: '3_0_0',
             item: {
-              name: '3_0_0 element',
+              label: '3_0_0 element',
               type: 'checkbox',
             },
           },
           {
             id: '3_0_1',
             item: {
-              name: '3_0_1 element',
+              label: '3_0_1 element',
               type: 'checkbox',
             },
           },
@@ -98,7 +98,7 @@ export const mockData: TDataNode[] = [
       {
         id: '3_1',
         item: {
-          name: '3_1 element',
+          label: '3_1 element',
           type: 'checkbox',
         },
       },
@@ -107,7 +107,7 @@ export const mockData: TDataNode[] = [
   {
     id: '4',
     item: {
-      name: '4 element',
+      label: '4 element',
       type: 'anchor',
       href: '#',
     },

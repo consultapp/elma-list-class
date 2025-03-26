@@ -1,50 +1,50 @@
-import { CheckboxNode } from './CheckBoxList'
+import { ProactorListNode } from './ProactorListNode'
 
-const root = new CheckboxNode(
+const root = new ProactorListNode(
   'root',
 
   { item: { label: 'Root', type: 'checkbox', checked: true } },
   [
-    new CheckboxNode(
+    new ProactorListNode(
       'child1',
       { item: { label: 'Child 1', type: 'checkbox', checked: true } },
       [
-        new CheckboxNode('leaf1', {
+        new ProactorListNode('leaf1', {
           item: { label: 'Leaf 1', type: 'checkbox', checked: true },
         }),
-        new CheckboxNode('leaf2', {
+        new ProactorListNode('leaf2', {
           item: { label: 'Leaf 2', type: 'checkbox', checked: true },
         }),
       ]
     ),
-    new CheckboxNode(
+    new ProactorListNode(
       'child2',
       { item: { label: 'Child 2', type: 'checkbox', checked: true } },
       [
-        new CheckboxNode(
+        new ProactorListNode(
           'child_2_1',
           { item: { label: 'Child 2_1', type: 'checkbox', checked: true } },
           [
-            new CheckboxNode(
+            new ProactorListNode(
               'leaf4',
               {
                 item: { label: 'Leaf 4', type: 'plain' },
               },
               [
-                new CheckboxNode('leaf4', {
+                new ProactorListNode('leaf4', {
                   item: { label: 'Leaf 4', type: 'plain' },
                 }),
-                new CheckboxNode('leaf2', {
+                new ProactorListNode('leaf2', {
                   item: { label: 'Leaf 2', type: 'checkbox', checked: true },
                 }),
               ]
             ),
-            new CheckboxNode('leaf2', {
+            new ProactorListNode('leaf2', {
               item: { label: 'Leaf 2', type: 'checkbox', checked: true },
             }),
           ]
         ),
-        new CheckboxNode('child_2_2', {
+        new ProactorListNode('child_2_2', {
           item: { label: 'Child 2_2', type: 'checkbox', checked: true },
         }),
       ]

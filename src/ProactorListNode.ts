@@ -2,20 +2,19 @@ type NodeProps = {
   item: TListItem
 }
 
-export class CheckboxNode {
+export class ProactorListNode {
   // id: string
   label: string
   checked: boolean = false
   indeterminate: boolean
-  //   children: CheckboxNode[]
-  parent: CheckboxNode | null
+  parent: ProactorListNode | null
   private element: HTMLLIElement | null = null
   private checkboxElement: HTMLInputElement | null = null
 
   constructor(
     public id: string,
     public props: NodeProps,
-    public children: CheckboxNode[] = []
+    public children: ProactorListNode[] = []
   ) {
     this.id = id
     this.label = props.item.label
