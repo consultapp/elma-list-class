@@ -72,6 +72,7 @@ export class ProactorListNode {
   #renderCheckbox() {
     if (this.element && this.props.item.type === 'checkbox') {
       this.checkboxElement = document.createElement('input')
+      this.checkboxElement.className = 'elma_empty_fix'
 
       this.checkboxElement.type = 'checkbox'
       this.checkboxElement.id = this.id
@@ -81,7 +82,6 @@ export class ProactorListNode {
         'change',
         () => {
           this.toggle()
-          console.log('this', this)
         },
         { signal: this.abortController.signal }
       )
@@ -110,8 +110,8 @@ export class ProactorListNode {
     if (this.element && this.props.item.type === 'anchor') {
       const anchor = document.createElement('a')
       anchor.textContent = this.label
-      anchor.href = anchor.href = this.props.item.href ?? ''
-      anchor.target = anchor.href = this.props.item.target ?? ''
+      anchor.href = this.props.item.href ?? ''
+      anchor.target = this.props.item.target ?? ''
 
       const mountPoint = this.isCategory() ? this.summary : this.element
       mountPoint.appendChild(anchor)

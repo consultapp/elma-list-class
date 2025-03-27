@@ -8,26 +8,27 @@ export type Props = {
 }
 
 export class ProactorListClass {
-  public element = this.createDomElement()
+  public element
   private rootNodes: ProactorListNode[]
 
   constructor(
     public data: TDataNode[],
     private className: string = 'nodeRoot',
-    public props: Props = {
+    private props: Props = {
       marker: {
         open: '➕',
         closed: '➖',
       },
     }
   ) {
+    this.element = this.createDomElement()
     this.rootNodes = this.convertHierarchy(data)
   }
 
   createDomElement() {
     const wrapper = document.createElement('div')
     wrapper.innerHTML = this.template
-    return wrapper.children[0] as HTMLLIElement
+    return wrapper.children[0] as HTMLUListElement
   }
 
   render(root: Element): void {
@@ -61,7 +62,7 @@ export class ProactorListClass {
           align-items: center;
         }
         .${this.className}  details > summary::before {
-          content: "${this.props?.marker?.closed ?? '➕'}";
+          content: "${this.props?.marker?.open ?? '➕'}";
           margin-right: 8px;
         }
         .${this.className} details[open] > summary::before {
@@ -86,7 +87,7 @@ export class ProactorListClass {
         item: {
           ...node.item,
           ...(node.item.type === 'checkbox' && { checked: true }),
-          ...(node.item.type === 'anchor' && { target: '_blank' }), // Пример автоматического добавления target
+          ...(node.item.type === 'anchor' && { target: '_blank' }),
         },
       }
 
@@ -103,8 +104,6 @@ export class ProactorListClass {
     return nodes.reduce((acc: string[], node) => {
       const isCheckedCheckbox =
         node.props.item.type === 'checkbox' && node.checked === true
-
-      console.log('node:', node, isCheckedCheckbox)
 
       if (isCheckedCheckbox) {
         acc.push(node.id)
