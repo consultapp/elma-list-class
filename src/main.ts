@@ -1,31 +1,10 @@
 import { mockData } from './mock'
-import { ProactorListNode } from './ProactorListNode'
+import { ProactorListClass } from './ProactorListClass'
 
-function convertHierarchy(nodes: TDataNode[]): ProactorListNode[] {
-  return nodes.map((node) => {
-    const props = {
-      item: {
-        ...node.item,
-        ...(node.item.type === 'checkbox' && { checked: true }),
-        ...(node.item.type === 'anchor' && { target: '_blank' }), // Пример автоматического добавления target
-      },
-    }
+const paListClass = new ProactorListClass(mockData)
 
-    const children = node.children ? convertHierarchy(node.children) : []
+paListClass.render(document.body)
 
-    return new ProactorListNode(
-      node.id,
-      props,
-      children,
-      node.category?.isExpanded
-    )
-  })
-}
-
-const proactorNodes: ProactorListNode[] = convertHierarchy(mockData)
-const container = document.createElement('ul')
-proactorNodes.forEach((r) => {
-  container.appendChild(r.render())
+document.querySelector('#getChecked')?.addEventListener('click', () => {
+  console.log('paListClass.', paListClass.getChecked())
 })
-
-document.body.appendChild(container)

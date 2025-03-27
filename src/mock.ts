@@ -83,15 +83,27 @@ export const mockData: TDataNode[] = [
             id: '3_0_0',
             item: {
               label: '3_0_0 element',
-              type: 'checkbox',
+              type: 'plain',
             },
-          },
-          {
-            id: '3_0_1',
-            item: {
-              label: '3_0_1 element',
-              type: 'checkbox',
+            category: {
+              isExpanded: true,
             },
+            children: [
+              {
+                id: '3_0_0_0',
+                item: {
+                  label: '3_0_0_0 element',
+                  type: 'checkbox',
+                },
+              },
+              {
+                id: '3_0_0_1',
+                item: {
+                  label: '3_0_0_1 element',
+                  type: 'checkbox',
+                },
+              },
+            ],
           },
         ],
       },
@@ -100,6 +112,7 @@ export const mockData: TDataNode[] = [
         item: {
           label: '3_1 element',
           type: 'checkbox',
+          checked: false,
         },
       },
     ],

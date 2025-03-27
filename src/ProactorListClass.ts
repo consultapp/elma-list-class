@@ -1,134 +1,132 @@
-// export type Props = {
-//   marker?: {
-//     open: string
-//     closed: string
-//   }
-// }
+import { ProactorListNode } from './ProactorListNode'
 
-// export class ProactorListClass {
-//   tree: TTreeNode[]
-//   element = this.createDomElement()
-//   rootNodes: ElmaListNode[]
+export type Props = {
+  marker?: {
+    open: string
+    closed: string
+  }
+}
 
-//   constructor(
-//     public data: TDataNode[],
-//     private className: string = 'nodeRoot',
-//     public props: Props = {
-//       marker: {
-//         open: '➕',
-//         closed: '➖',
-//       },
-//     }
-//   ) {
-//     this.data.forEach((d) => this.buildTreeNodeFromData(d))
-//     this.tree = this.data as TTreeNode[]
-//     this.rootNodes = this.tree.map((t) =>
-//       t._isCategory
-//         ? new ElmaListNodeCategory(null, t, props)
-//         : new ElmaListNode(null, t, props)
-//     )
-//   }
+export class ProactorListClass {
+  public element = this.createDomElement()
+  private rootNodes: ProactorListNode[]
 
-//   createDomElement() {
-//     const wrapper = document.createElement('div')
-//     wrapper.innerHTML = this.template
-//     return wrapper.children[0] as HTMLLIElement
-//   }
+  constructor(
+    public data: TDataNode[],
+    private className: string = 'nodeRoot',
+    public props: Props = {
+      marker: {
+        open: '➕',
+        closed: '➖',
+      },
+    }
+  ) {
+    this.rootNodes = this.convertHierarchy(data)
+  }
 
-//   render(root: Element): void {
-//     if (!(root instanceof Element)) {
-//       throw new Error('Invalid root element')
-//     }
+  createDomElement() {
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = this.template
+    return wrapper.children[0] as HTMLLIElement
+  }
 
-//     this.appendChildren()
-//     root.append(this.element)
-//   }
+  render(root: Element): void {
+    if (!(root instanceof Element)) {
+      throw new Error('Invalid root element')
+    }
 
-//   buildTreeNodeFromData(data: TDataNode): TTreeNode {
-//     Object.assign(data, { _isCategory: this.isCategory(data) })
-//     data.children?.forEach((item) => {
-//       this.buildTreeNodeFromData(item)
-//     })
+    this.appendChildren()
+    root.append(this.element)
+  }
 
-//     return data as TTreeNode
-//   }
+  private appendChildren(): void {
+    this.rootNodes.forEach((r) => {
+      this.element.appendChild(r.render())
+    })
+  }
 
-//   private isCategory(item: TDataNode): boolean {
-//     return Array.isArray(item.children) && item.children.length > 0
-//   }
+  get template() {
+    return `
+    <ul class="${this.className}">
+      <style>
+        .${this.className} ul, li{
+          list-style: none;
+          margin:0;
+        }
+        .${this.className} details summary,
+        .${this.className} details summary::-webkit-details-marker {
+          list-style: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+        }
+        .${this.className}  details > summary::before {
+          content: "${this.props?.marker?.closed ?? '➕'}";
+          margin-right: 8px;
+        }
+        .${this.className} details[open] > summary::before {
+          content: "${this.props?.marker?.closed ?? '➖'}";
 
-//   private appendChildren(): void {
-//     const validElements = this.rootNodes
-//       .map((r) => r.element)
-//       .filter((el): el is HTMLLIElement => el !== undefined)
+        }
+        .${this.className} .nodeRoot__single{
+          margin-left: 24px;
+        }
+        .${this.className} input {
+          margin:0;
+          margin-right:5px;
+          cursor: pointer;
+        }
+      </style>
+    </ul>`
+  }
 
-//     if (validElements.length > 0) {
-//       this.element.append(...validElements)
-//     }
-//   }
+  convertHierarchy(nodes: TDataNode[]): ProactorListNode[] {
+    return nodes.map((node) => {
+      const props = {
+        item: {
+          ...node.item,
+          ...(node.item.type === 'checkbox' && { checked: true }),
+          ...(node.item.type === 'anchor' && { target: '_blank' }), // Пример автоматического добавления target
+        },
+      }
 
-//   get template() {
-//     return `
-//     <ul class="${this.className}">
-//       <style>
-//         .${this.className} ul, li{
-//           list-style: none;
-//           margin:0;
-//         }
-//         .${this.className} details summary,
-//         .${this.className} details summary::-webkit-details-marker {
-//           list-style: none;
-//           cursor: pointer;
-//           display: flex;
-//           align-items: center;
-//         }
-//         .${this.className}  details > summary::before {
-//           content: "${this.props?.marker?.closed ?? '➕'}";
-//           margin-right: 8px;
-//         }
-//         .${this.className} details[open] > summary::before {
-//           content: "${this.props?.marker?.closed ?? '➖'}";
+      return new ProactorListNode(
+        node.id,
+        props,
+        node.children ? this.convertHierarchy(node.children) : [],
+        node.category?.isExpanded
+      )
+    })
+  }
 
-//         }
-//         .${this.className} .nodeRoot__single{
-//           margin-left: 24px;
-//         }
-//         .${this.className} input {
-//           margin:0;
-//           cursor: pointer;
-//         }
-//       </style>
-//     </ul>`
-//   }
+  getChecked(nodes: ProactorListNode[] = this.rootNodes): string[] {
+    return nodes.reduce((acc: string[], node) => {
+      const isCheckedCheckbox =
+        node.props.item.type === 'checkbox' && node.checked === true
 
-//   getChecked() {
-//     return this.tree.map((r) => ElmaListClass.getRecursiveChecked(r)).flat()
-//   }
+      console.log('node:', node, isCheckedCheckbox)
 
-//   static getRecursiveChecked(node: TTreeNode): string[] {
-//     const result: string[] = []
-//     if (node.item.type === 'checkbox' && node.item.checked) {
-//       result.push(node.id)
-//     }
+      if (isCheckedCheckbox) {
+        acc.push(node.id)
+      }
 
-//     if (node._isCategory) {
-//       node.children?.forEach((c) =>
-//         result.push(...ElmaListClass.getRecursiveChecked(c as TTreeNode))
-//       )
-//     }
-//     return result
-//   }
+      if (node.children.length > 0) {
+        acc.push(...this.getChecked(node.children))
+      }
 
-//   remove() {
-//     this.element?.remove()
-//     this.element = null!
-//     this.rootNodes.forEach((n) => n.remove())
-//   }
+      return acc
+    }, [])
+  }
 
-//   destroy(): void {
-//     this.rootNodes.forEach((node) => node.destroy())
-//     this.element.remove()
-//     this.tree = []
-//     this.rootNodes = []
-//   }
-// }
+  remove() {
+    this.element?.remove()
+    this.element = null!
+    this.rootNodes.forEach((n) => n.destroy())
+  }
+
+  destroy(): void {
+    this.rootNodes.forEach((node) => node.destroy())
+    this.element.remove()
+    this.rootNodes = []
+  }
+}

@@ -8,7 +8,7 @@
 
 <!-- markdownlint-disable MD033 -->
 <div style="text-align: center;">
-  <img src="/public/screen2.png" height="300px" alt="mockData" />
+  <img src="/public/screen3.png" height="300px" alt="mockData" />
 </div>
 <!-- markdownlint-enable MD033 -->
 
@@ -21,9 +21,7 @@ list.render(document.querySelector('#root')!)
 
 ## Получение массива id, отмеченных чекбоксов
 
-Класс мутирует входной массив TDataNode, можно обойти и собрать интересующие отмеченные чекбоксы.
-
-Так же доступен метод `getChecked()`
+Доступен метод `getChecked()`
 
 ```ts
 ElmaListClass.getChecked(): string[]
