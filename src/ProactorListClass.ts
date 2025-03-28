@@ -75,7 +75,7 @@ export class ProactorListClass {
         }
 
         .${this.className} li.no_children_item {
-          margin-left: 24px;
+          margin-left: 20px;
         }
 
         .${this.className} details summary{
