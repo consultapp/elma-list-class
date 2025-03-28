@@ -95,6 +95,7 @@ export class ProactorListNode {
       mountPoint.appendChild(label)
     }
   }
+
   #renderPlain() {
     if (this.element && this.props.item.type === 'plain') {
       const label = document.createElement('label')
@@ -170,6 +171,37 @@ export class ProactorListNode {
       currentParent.updateElementState()
 
       currentParent = currentParent.parent
+    }
+  }
+
+  public uncheckAll(): void {
+    this.traverse((node) => {
+      node.checked = false
+      node.indeterminate = false
+      node.updateElementState()
+    })
+
+    this.traverse((node) => {
+      node.#updateParentState()
+    })
+  }
+
+  public checkAll(): void {
+    this.traverse((node) => {
+      node.checked = true
+      node.indeterminate = false
+      node.updateElementState()
+    })
+
+    this.traverse((node) => {
+      node.#updateParentState()
+    })
+  }
+
+  private traverse(callback: (node: ProactorListNode) => void): void {
+    callback(this)
+    for (const child of this.children) {
+      child.traverse(callback)
     }
   }
 

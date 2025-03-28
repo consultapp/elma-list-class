@@ -28,10 +28,18 @@ export class ProactorListClass {
   createDomElement() {
     const wrapper = document.createElement('div')
     wrapper.innerHTML = this.template
-    return wrapper.children[0] as HTMLUListElement
+    const element = wrapper.children[0]
+    if (!element || element.tagName !== 'UL') {
+      throw new Error('Ошибка создания элемента')
+    }
+    return element as HTMLUListElement
   }
 
   render(root: Element): void {
+    if (this.element && this.element.parentNode) {
+      this.element.parentNode.removeChild(this.element)
+    }
+
     if (!(root instanceof Element)) {
       throw new Error('Invalid root element')
     }
@@ -117,6 +125,14 @@ export class ProactorListClass {
     }, [])
   }
 
+  uncheckAll() {
+    this.rootNodes.forEach((n) => n.uncheckAll())
+  }
+
+  checkAll() {
+    this.rootNodes.forEach((n) => n.checkAll())
+  }
+
   remove() {
     this.element?.remove()
     this.element = null!
@@ -124,8 +140,11 @@ export class ProactorListClass {
   }
 
   destroy(): void {
+    if (this.element) {
+      this.element.remove()
+      this.element = null!
+    }
     this.rootNodes.forEach((node) => node.destroy())
-    this.element.remove()
     this.rootNodes = []
   }
 }
