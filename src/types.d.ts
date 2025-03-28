@@ -31,9 +31,13 @@ interface PlainItem extends BaseCommonItem {}
 interface CheckboxItem extends BaseCommonItem {
   checked?: boolean
   indeterminate?: boolean
+  href?: string
+  target?: TTarget
 }
 
 interface AnchorItem extends BaseCommonItem {
   href: string
-  target?: string
+  target?: TTarget
 }
+
+type TTarget = '_blank' | '_self' | '_parent' | '_top' | string

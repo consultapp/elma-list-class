@@ -86,9 +86,17 @@ export class ProactorListNode {
         { signal: this.abortController.signal }
       )
 
-      const label = document.createElement('label')
-      label.htmlFor = this.id
-      label.textContent = this.label
+      let label
+      if (this.props.item.href) {
+        label = document.createElement('a')
+        label.innerText = this.label
+        label.href = this.props.item.href
+        if (this.props.item.target) label.target = this.props.item.target
+      } else {
+        label = document.createElement('label')
+        label.htmlFor = this.id
+        label.textContent = this.label
+      }
 
       const mountPoint = this.isCategory() ? this.summary : this.element
       mountPoint.appendChild(this.checkboxElement)
@@ -112,7 +120,7 @@ export class ProactorListNode {
       const anchor = document.createElement('a')
       anchor.textContent = this.label
       anchor.href = this.props.item.href ?? ''
-      anchor.target = this.props.item.target ?? ''
+      if (this.props.item.target) anchor.target = this.props.item.target
 
       const mountPoint = this.isCategory() ? this.summary : this.element
       mountPoint.appendChild(anchor)

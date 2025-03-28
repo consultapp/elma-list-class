@@ -36,6 +36,8 @@ export const mockData: TDataNode[] = [
         item: {
           label: '2_1 element',
           type: 'checkbox',
+          href: '#',
+          target: '_blank',
         },
         children: [
           {
