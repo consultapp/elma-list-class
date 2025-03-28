@@ -104,6 +104,7 @@ export class ProactorListClass {
           margin:0;
           margin-right:5px;
           cursor: pointer;
+          margin-bottom: .5rem;
         }
       </style>
     </ul>`
