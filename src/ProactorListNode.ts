@@ -60,6 +60,8 @@ export class ProactorListNode {
       this.details.open = this.isExpanded ?? true
       this.details.appendChild(this.summary)
       this.element.appendChild(this.details)
+    } else {
+      this.element.classList.add('no_children_item')
     }
   }
 

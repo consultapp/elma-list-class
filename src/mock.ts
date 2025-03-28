@@ -38,6 +38,7 @@ export const mockData: TDataNode[] = [
           type: 'checkbox',
           href: '#',
           target: '_blank',
+          checked: true,
         },
         children: [
           {
@@ -45,6 +46,7 @@ export const mockData: TDataNode[] = [
             item: {
               label: '2_1_0 element',
               type: 'checkbox',
+              checked: true,
             },
           },
           {
@@ -52,6 +54,7 @@ export const mockData: TDataNode[] = [
             item: {
               label: '2_1_1 element',
               type: 'checkbox',
+              checked: true,
             },
           },
         ],
@@ -114,7 +117,7 @@ export const mockData: TDataNode[] = [
         item: {
           label: '3_1 element',
           type: 'checkbox',
-          checked: false,
+          checked: true,
         },
       },
     ],

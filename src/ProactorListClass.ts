@@ -16,8 +16,8 @@ export class ProactorListClass {
     private className: string = 'nodeRoot',
     private props: Props = {
       marker: {
-        open: '➕',
-        closed: '➖',
+        open: '▶',
+        closed: '▼',
       },
     }
   ) {
@@ -62,6 +62,25 @@ export class ProactorListClass {
           list-style: none;
           margin:0;
         }
+
+        .${this.className} input[type="checkbox"]:checked {
+          accent-color:rgb(161, 228, 162); 
+          background: rgb(161, 228, 162); 
+          border-color: rgb(161, 228, 162); 
+        }
+
+        .${this.className} input[type="checkbox"]:not(:checked) {
+          filter: hue-rotate(150deg); 
+          opacity: 0.8; 
+        }
+
+        .${this.className} li.no_children_item {
+          margin-left: 24px;
+        }
+
+        .${this.className} details summary{
+          min-height:1.5rem;
+        }
         .${this.className} details summary,
         .${this.className} details summary::-webkit-details-marker {
           list-style: none;
@@ -72,6 +91,7 @@ export class ProactorListClass {
         .${this.className}  details > summary::before {
           content: "${this.props?.marker?.open ?? '➕'}";
           margin-right: 8px;
+          color:rgb(175, 207, 211);
         }
         .${this.className} details[open] > summary::before {
           content: "${this.props?.marker?.closed ?? '➖'}";
@@ -94,7 +114,9 @@ export class ProactorListClass {
       const props = {
         item: {
           ...node.item,
-          ...(node.item.type === 'checkbox' && { checked: true }),
+          ...(node.item.type === 'checkbox' && {
+            checked: node.item.checked ?? false,
+          }),
           ...(node.item.type === 'anchor' && { target: '_blank' }),
         },
       }
